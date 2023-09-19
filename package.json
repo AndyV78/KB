@@ -42,7 +42,7 @@
     "bulls:test": "asp --verbose --config contracts/bulls/as-pect.config.js",
     "bulls:deploy": "ts-node contracts/bulls/scripts/deployment.ts",
     "lint": "eslint --max-warnings 0 --ext ts \"*/assembly/**/*.ts\"",
-    "postinstall": "copyfiles -u 3 node_modules/koilib/dist/koinos.js dist/js && copyfiles -u 3 node_modules/kondor-js/dist/kondor.js dist/js && copyfiles website/index.html dist && website/style.css dist",
+    "postinstall": "copyfiles -u 3 node_modules/koilib/dist/koinos.js dist/js && copyfiles -u 3 node_modules/kondor-js/dist/kondor.js dist/js && copyfiles -u 1 website/index.html dist && copyfiles -u 1 website/style.css dist",
     "preview": "vite preview"
   },
   "config": {
