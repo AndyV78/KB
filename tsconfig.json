@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "types": ["node", "jest"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", "assembly/**"]
+}
