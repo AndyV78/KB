@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css">
+  <title>Koinos Bulls</title>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h1>Koinos Bulls</h1>
+      <input type="text" placeholder="0x01" id="tokenId"/>
+      <button id="getOwner">Get Owner</button>
+
+      <input type="text" placeholder="transfer to..." id="newOwner"/>
+      <button id="transfer">Transfer</button>
+    </header>
+    <div class="card">
+      <div class="results invisible">
+
+      </div>
+      <button id="getAccounts">Connect kondor</button>
+    </div>
+  </div>
+  <script src="js/kondor.js"></script>
+  <script src="js/koinos.js"></script>
+  <script type="module">
+    let bullsContract;
+    let accounts;
+
+    async function connectKondor() {
+      console.log("Connecting kondor...")
+      accounts = await kondor.getAccounts();
+      console.log("Kondor connected");
+      console.log(accounts);
+    }
+
+    async function getContract(withSigner = false) {
+      let signer;
+      if (withSigner) {
+        if (!accounts) await connectKondor();
+        signer = kondor.getSigner(accounts[0].address);
+      }
+
+      if (bullsContract) {
+        bullsContract.signer = signer;
+        return bullsContract;
+      }
+
+      const provider = new Provider(["https://harbinger-api.koinos.io"]);
+      const bullsContractAddress = "1Kac6LzimqviUQc8MZCb5y9NhnaXBTDfhR";
+    
+      bullsContract = new Contract({
+        id: bullsContractAddress,
+        provider,
+        ...(withSigner && { signer }),
+      });
+      
+      // get the abi of todosContract
+      await bullsContract.fetchAbi();
+      
+      return bullsContract;
+    }
+
+    async function getOwner() {
+      console.log("Getting owner");
+      const { value: tokenId } = document.getElementById("tokenId");
+      const contract = await getContract();
+      const { result } = await contract.functions.owner_of({ token_id: tokenId });
+      console.log("Result");
+      console.log(result);
+    }
+
+    async function transfer() {
+      const { value: tokenId } = document.getElementById("tokenId");
+      const { value: to } = document.getElementById("newOwner");
+      const contract = await getContract(true);
+      const { transaction, receipt } = await contract.functions.transfer({
+        from: accounts[0].address,
+        to,
+        token_id: tokenId,
+      });
+      console.log("submitted. Receipt:");
+      console.log(receipt);
+      
+      // wait to be mined
+      const { blockNumber } = await transaction.wait();
+      console.log(`mined in block ${blockNumber}`);
+    }
+
+    document.getElementById("getAccounts").addEventListener("click", connectKondor);
+    document.getElementById("getOwner").addEventListener("click", getOwner);
+    document.getElementById("transfer").addEventListener("click", transfer);
+  </script>
+</body>
+</html>
