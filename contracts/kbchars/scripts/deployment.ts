@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Signer, Contract, Provider } from "koilib";
-import { TransactionJson } from "koilib/lib/interface";
-import abi from "../build/bulls-abi.json";
+import abi from "../build/kbchars-abi.json";
 import koinosConfig from "../koinos.config.js";
 
 const [inputNetworkName] = process.argv.slice(2);
@@ -20,7 +19,7 @@ async function main() {
     provider,
     abi,
     bytecode: fs.readFileSync(
-      path.join(__dirname, "../build/release/bulls.wasm")
+      path.join(__dirname, "../build/release/kbchars.wasm")
     ),
     options: {
       payer: network.accounts.manaSharer.id,

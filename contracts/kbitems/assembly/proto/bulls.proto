@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package bulls;
+
+import "koinos/options.proto";

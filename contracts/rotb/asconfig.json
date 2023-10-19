@@ -1,14 +1,14 @@
 {
   "targets": {
     "debug": {
-      "binaryFile": "./build/debug/bulls.wasm",
-      "textFile": "./build/debug/bulls.wat",
+      "binaryFile": "./build/debug/rotb.wasm",
+      "textFile": "./build/debug/rotb.wat",
       "sourceMap": true,
       "debug": true
     },
     "release": {
-      "binaryFile": "./build/release/bulls.wasm",
-      "textFile": "./build/release/bulls.wat",
+      "binaryFile": "./build/release/rotb.wasm",
+      "textFile": "./build/release/rotb.wat",
       "sourceMap": true,
       "optimizeLevel": 3,
       "shrinkLevel": 0,

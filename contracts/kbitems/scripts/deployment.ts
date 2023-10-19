@@ -1,5 +1,7 @@
+import fs from "fs";
+import path from "path";
 import { Signer, Contract, Provider } from "koilib";
-import abi from "../build/bulls-abi.json";
+import abi from "../build/kbitems-abi.json";
 import koinosConfig from "../koinos.config.js";
 
 const [inputNetworkName] = process.argv.slice(2);
@@ -16,21 +18,23 @@ async function main() {
     signer: contractAccount,
     provider,
     abi,
+    bytecode: fs.readFileSync(
+      path.join(__dirname, "../build/release/kbitems.wasm")
+    ),
     options: {
       payer: network.accounts.manaSharer.id,
       rcLimit: "10000000000",
     },
   });
 
-  const { receipt, transaction } = await contract.functions.mint({
-    token_id: "0x01",
-    to: contractAccount.address,
+  const { receipt, transaction } = await contract.deploy({
+    abi: JSON.stringify(abi),
   });
   console.log("Transaction submitted. Receipt: ");
   console.log(receipt);
   const { blockNumber } = await transaction.wait("byBlock", 60000);
   console.log(
-    `Transaction mined in block number ${blockNumber} (${networkName})`
+    `Contract ${contractAccount.address} uploaded in block number ${blockNumber} (${networkName})`
   );
 }
 

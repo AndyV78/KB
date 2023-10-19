@@ -87,4 +87,4 @@ function deriveKeySigner(accIndex, signerIndex, name = "") {
   });
 }
 
-console.log([0, 1, 2, 3].map((i) => deriveKeyAccount(i)));
+console.log([2, 3, 4].map((i) => deriveKeyAccount(i)));
